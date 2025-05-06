@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -84,9 +85,10 @@ class ProductController extends Controller
             // Delete the old image if it exists
             if ($product->image_url) {
                 $oldImagePath = str_replace(asset('storage/'), '', $product->image_url);
-                if (file_exists(storage_path('app/public/' . $oldImagePath))) {
-                    unlink(storage_path('app/public/' . $oldImagePath));
-                }
+                // if (file_exists(storage_path('app/public/' . $oldImagePath))) {
+                //     unlink(storage_path('app/public/' . $oldImagePath));
+                // }
+                Storage::disk('public')->delete($oldImagePath);
             }
 
             // Store the new image
@@ -109,6 +111,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        // Delete the image if it exists
+        if ($product->image_url) {
+            $oldImagePath = str_replace(asset('storage/'), '', $product->image_url);
+            Storage::disk('public')->delete($oldImagePath);
+        }
         $product->delete();
 
         return response()->json([
