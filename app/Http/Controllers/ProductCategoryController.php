@@ -55,7 +55,7 @@ class ProductCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProductCategory $productCategory, $id)
+    public function update(Request $request, ProductCategory $productCategory)
     {
         $request->validate([
             'name' => 'required|string|max:255',
