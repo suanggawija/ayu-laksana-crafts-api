@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductCategoryResource;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 
@@ -42,15 +43,8 @@ class ProductCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(ProductCategory $productCategory)
     {
-        $productCategory = ProductCategory::find($id);
-        if (!$productCategory) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Product Category not found',
-            ], 404);
-        }
         return response()->json([
             'status' => true,
             'message' => 'Product Category retrieved successfully',
@@ -61,19 +55,11 @@ class ProductCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ProductCategory $productCategory, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
-
-        $productCategory = ProductCategory::find($id);
-        if (!$productCategory) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Product Category not found',
-            ], 404);
-        }
 
         $productCategory->update($request->all());
 
@@ -87,16 +73,8 @@ class ProductCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(ProductCategory $productCategory)
     {
-        $productCategory = ProductCategory::find($id);
-        if (!$productCategory) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Product Category not found',
-            ], 404);
-        }
-
         $productCategory->delete();
 
         return response()->json([

@@ -25,5 +25,8 @@ Route::resource('products', ProductController::class)->only([
 
 Route::resource('product-categories', ProductCategoryController::class)->only([
     'index',
-    'show'
+    'store',
+    'show',
+    'update',
+    'destroy'
 ]);
