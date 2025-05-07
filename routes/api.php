@@ -1,35 +1,55 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+// Auth Routes
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/login', 'login');
+    Route::post('/register', 'register');
 
-Route::resource('users', UserController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy'
-]);
+    Route::post('/logout', 'logout')->middleware('auth:sanctum');
+    Route::get('/user', 'user')->middleware('auth:sanctum');
+});
 
-Route::resource('products', ProductController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy'
-]);
+// User Routes
+Route::resource('users', UserController::class)
+    ->only(['index', 'store', 'show', 'update', 'destroy'])
+    ->middleware('auth:sanctum');
 
-Route::resource('product-categories', ProductCategoryController::class)->only([
-    'index',
-    'store',
-    'show',
-    'update',
-    'destroy'
-]);
+// Product Routes
+Route::resource('products', ProductController::class)
+    ->only(['index', 'show']);
+
+Route::resource('products', ProductController::class)
+    ->only(['store', 'update', 'destroy'])
+    ->middleware(['auth:sanctum', 'admin']);
+
+
+// Product Category Routes
+Route::resource('product-categories', ProductCategoryController::class)
+    ->only(['index', 'store', 'show', 'update', 'destroy'])
+    ->middleware(['auth:sanctum', 'admin']);
+
+// Cart Routes
+Route::resource('cart', CartController::class)
+    ->only(['index'])
+    ->middleware(['auth:sanctum']);
+
+Route::resource('cart', CartController::class)
+    ->only(['store', 'show', 'update', 'destroy'])
+    ->middleware(['auth:sanctum']);
+
+Route::resource('cart', CartController::class)
+    ->only(['update', 'destroy'])
+    ->middleware(['auth:sanctum']);
+
+// Order Routes
+Route::resource('orders', OrderController::class)
+    ->only(['index', 'store', 'show', 'update', 'destroy'])
+    ->middleware(['auth:sanctum', 'admin_or_owner']);

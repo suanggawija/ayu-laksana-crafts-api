@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
@@ -52,14 +53,7 @@ class UserController extends Controller
         }
 
         // Hash the password before storing it
-        $request->merge(['password' => bcrypt($request->password)]);
-
-        // // Handle file upload if a profile picture is provided
-        // if ($request->hasFile('profile_picture')) {
-        //     $imagePath = $request->file('profile_picture')->store('images/users', 'public');
-        //     $imageUrl = asset('storage/' . $imagePath);
-        //     $request->merge(['profile_picture' => $imageUrl]);
-        // }
+        $request->merge(['password' => Hash::make($request->password)]);
 
         // Handle file upload if an image is provided
         if ($request->hasFile('picture')) {
