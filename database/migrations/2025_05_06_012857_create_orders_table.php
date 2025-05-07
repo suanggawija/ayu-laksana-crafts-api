@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('order_number')->unique();
             $table->decimal('total_amount', 10, 2);
-            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'delivered', 'completed', 'cancelled'])->default('pending');
             $table->text('shipping_address');
             $table->string('shipping_city');
             $table->string('shipping_state');
