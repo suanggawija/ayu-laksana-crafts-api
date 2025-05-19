@@ -24,6 +24,8 @@ Route::resource('users', UserController::class)
     ->middleware('auth:sanctum');
 
 // Product Routes
+Route::get('products/most-ordered', [ProductController::class, 'mostOrdered']);
+
 Route::resource('products', ProductController::class)
     ->only(['index', 'show']);
 
